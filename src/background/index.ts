@@ -1,1 +1,1 @@
-// conducts all the action
+// conducts all the actions
