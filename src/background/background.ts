@@ -39,6 +39,26 @@ class RecordingController {
     });
   }
 
+  stop () {
+    console.log('stopped recording');
+    this.badgeStatus = this.recording.length > 0 ? '1' : '';
+    chrome.runtime.onMessage.removeListener(this.bindedMessageHandler);
+    
+    
+    chrome.storage.local.set({recording: this.recording}, () => {
+      console.log('recording stored');
+    });
+  }
+
+  cleanup (cb) {
+    console.log('cleaning up');
+    this.recording = [];
+    chrome.storage.local.remove('recording', () => {
+      console.log('cleared the recording array');
+    });
+    if (cb) cb();
+  }
+
   handleMessage () {
 
   }
