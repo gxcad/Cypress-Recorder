@@ -63,6 +63,10 @@ function ejectEventRecorder(): void {
  * Starts the recording process by injecting the event recorder into the active tab.
  */
 function startRecording(): void {
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    currentURL = tabs[0].url;
+    console.log('url here', currentURL);
+});
   chrome.webNavigation.onBeforeNavigate.addListener(ejectEventRecorder);
   chrome.webNavigation.onCompleted.addListener(injectEventRecorder);
   injectEventRecorder();
