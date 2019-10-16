@@ -63,9 +63,9 @@ function ejectEventRecorder(): void {
  * Starts the recording process by injecting the event recorder into the active tab.
  */
 function startRecording(): void {
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    let activeTab = tabs[0];
-    let regex = /^chrome:\/\//i;
+  chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+    const activeTab = tabs[0];
+    const regex = /^chrome:\/\//i;
     if (activeTab.url.match(regex)) {
       console.log('this is not a valid url', activeTab.url);
     }
