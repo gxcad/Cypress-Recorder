@@ -64,9 +64,12 @@ function ejectEventRecorder(): void {
  */
 function startRecording(): void {
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    currentURL = tabs[0].url;
-    console.log('url here', currentURL);
-});
+    let activeTab = tabs[0];
+    let regex = /^chrome:\/\//i;
+    if (activeTab.url.match(regex)) {
+      console.log('this is not a valid url', activeTab.url);
+    }
+ });
   chrome.webNavigation.onBeforeNavigate.addListener(ejectEventRecorder);
   chrome.webNavigation.onCompleted.addListener(injectEventRecorder);
   injectEventRecorder();
