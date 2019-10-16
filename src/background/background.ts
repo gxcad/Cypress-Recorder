@@ -67,17 +67,20 @@ function ejectEventRecorder(): void {
 /**
  * Starts the recording process by injecting the event recorder into the active tab.
  */
-function startRecording(): void {
+function startRecording(sendResponse: (error: true) => void): void {
   chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
     const activeTab = tabs[0];
     const regex = /^chrome:\/\//i;
     if (activeTab.url.match(regex)) {
+      // use code in stop method for displaying the warning
       console.log('this is not a valid url', activeTab.url);
+      sendResponse(true);
+    } else {
+      chrome.webNavigation.onBeforeNavigate.addListener(ejectEventRecorder);
+      chrome.webNavigation.onCompleted.addListener(injectEventRecorder);
+      injectEventRecorder();
     }
- });
-  chrome.webNavigation.onBeforeNavigate.addListener(ejectEventRecorder);
-  chrome.webNavigation.onCompleted.addListener(injectEventRecorder);
-  injectEventRecorder();
+  });
 }
 
 /**
@@ -117,12 +120,12 @@ function cleanUp(): void {
 function handleControlAction(
   action: RecAction,
   sender: chrome.runtime.MessageSender,
-  sendResponse: (response: BlockData) => void,
+  sendResponse: (response: BlockData | boolean) => void,
 ): void {
   console.log('handleControlAction', action.type);
   switch (action.type) {
     case 'startRec':
-      startRecording();
+      startRecording(sendResponse);
       chrome.storage.local.set({ status: 'on' });
       break;
     case 'stopRec':

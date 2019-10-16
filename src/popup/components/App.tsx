@@ -8,13 +8,19 @@ import '../../assets/styles/styles.scss';
 
 export default () => {
   const [recStatus, setRecStatus] = React.useState<RecState>('off');
+  const [isError, setIsError] = React.useState<boolean>(false);
   const [codeBlocks, setCodeBlocks] = React.useState<BlockData>([]);
   const [shouldInfoDisplay, setShouldInfoDisplay] = React.useState<boolean>(true);
 
   const handleToggle = (action: RecAction): void => {
     if (action.type === 'startRec') {
       setRecStatus('on');
-      chrome.runtime.sendMessage(action);
+      chrome.runtime.sendMessage(action, (error: boolean) => {
+        if (error) {
+          setIsError(true);
+          setRecStatus('off');
+        }
+      });
     } else if (action.type === 'stopRec') {
       setRecStatus('done');
       chrome.runtime.sendMessage(action, (response: BlockData) => {
