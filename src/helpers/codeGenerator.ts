@@ -40,8 +40,7 @@ function handleKeydown(event: ParsedEvent): CodeBlock | null {
             shiftKey: shiftKey,\n
             ctrlKey: ctrlKey\n
         });\n
-      });\n
-      cy.get('${event.selector}').type({leftarrow});`;
+      });\n`;
     case 'Enter':
       return null;
     case 'Shift':
