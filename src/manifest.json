@@ -5,8 +5,12 @@
     "manifest_version": 2,
     "permissions": [
       "activeTab",
+      "clipboardWrite",
       "storage",
-      "webNavigation"
+      "tabs",
+      "webNavigation",
+      "http://*/*",
+      "https://*/*"
     ],
     "background": {
       "scripts": ["./background/background.js"],
