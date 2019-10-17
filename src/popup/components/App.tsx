@@ -56,13 +56,13 @@ export default () => {
       if (result.codeBlocks) setCodeBlocks(result.codeBlocks);
     });
   }, []);
-
   return (
+    // isError is a boolean for if tab is valid or not. true means it should dynamically render a warning to switch tabs
     <div id="App">
       <Header shouldInfoDisplay={shouldInfoDisplay} toggleInfoDisplay={toggleInfoDisplay} />
       {
         (shouldInfoDisplay
-          ? <Body codeBlocks={codeBlocks} recStatus={recStatus} />
+          ? <Body codeBlocks={codeBlocks} recStatus={recStatus} /> <p>{isError}</p>
           : <Info />
           )
       }
