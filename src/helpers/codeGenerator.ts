@@ -32,6 +32,16 @@ function handleKeydown(event: ParsedEvent): CodeBlock | null {
       return `cy.get('${event.selector}').type({downarrow});`;
     case 'ArrowLeft':
       return `cy.get('${event.selector}').type({leftarrow});`;
+    case 'Tab':
+      return `Cypress.Commands.add('typeTab', (shiftKey, ctrlKey) => {\n
+        cy.focused().trigger('keydown', {\n
+            keyCode: 9,\n
+            which: 9,\n
+            shiftKey: shiftKey,\n
+            ctrlKey: ctrlKey\n
+        });\n
+      });\n
+      cy.get('${event.selector}').type({leftarrow});`;
     case 'Enter':
       return null;
     case 'Shift':
@@ -62,7 +72,7 @@ function handleSubmit(event: ParsedEvent): CodeBlock {
 
 /**
  * Generates a line of Cypress code that replicates an action by a user.
- * @param event 
+ * @param event
  */
 function generateBlock(event: ParsedEvent): CodeBlock {
   console.log('event', event);
